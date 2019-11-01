@@ -9,10 +9,10 @@
 		<view class="cu-bar bg-white search fixed" v-bind:style="{top:CustomBar+'px'}">
 			<view class="search-form ">
 				<text class="cuIcon-search"></text>
-				<input type="text" v-model="keywords" placeholder="关键字（空格隔开，支持模糊搜索）" confirm-type="search"  v-on:input="search(keywords)"></input>
+				<input type="text" v-model="keywords" placeholder="关键字（空格隔开，支持模糊搜索）" confirm-type="search" v-on:input="search(keywords)"></input>
 			</view>
-			<button class="cu-btn  bg-grey" style="margin-right: 10px;" bindtap="clean">清空</button>
-			<button class="cu-btn  bg-grey" style="margin-right: 10px;" bindtap="upload">上传</button>
+			<button class="cu-btn  bg-grey" style="margin-right: 10px;" @tap="clean">清空</button>
+			<button class="cu-btn  bg-grey" style="margin-right: 10px;" @tap="upload">上传</button>
 		</view>
 
 		<view class="bg-white" style="padding: 0px;">
@@ -22,71 +22,92 @@
 			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">新增识图功能，点击右边上传按钮上传游戏中的公开招募界面截图即可</view>
 			<view class="flex flex-wrap" style="padding:5px 5px 0 5px">
 				<!--  data-title='{{item.name}}' class="tag-number cu-tag {{item.showFlag?'bg-olive':'line-olive'}}" -->
-				<view v-for="item in showStars" v-bind:key="item.name" v-on:tap="clickStars(item.name)" class="tag-number cu-tag" :class="item.showFlag?'bg-olive':'line-olive'">{{item.name}}</view>
+				<view v-for="item in showStars" v-bind:key="item.name" v-on:tap="clickStars(item.name)" class="tag-number cu-tag"
+				 :class="item.showFlag?'bg-olive':'line-olive'">{{item.name}}</view>
 			</view>
 		</view>
-		
+
 		<view class="bg-white padding">
-		  <view>
-		    <view class="flex flex-wrap" v-for="tag in tags" v-bind:key="tag.cn">
-		      <view class="tag-title cu-tag bg-grey light">{{tag.cn}}</view>
-		      <view class="tag-wrap">
-		        <view class="flex flex-wrap">
-		          <view class="tag-text cu-tag" :class="t.showFlag?'bg-olive':'line-olive'" v-for="t in tag.cntags" v-bind:key="t.name" v-on:tap="clickTag(t.name)" >{{t.name}}</view>
-		        </view>
-		      </view>
-		    </view>
-		  </view>
+			<view>
+				<view class="flex flex-wrap" v-for="tag in tags" v-bind:key="tag.cn">
+					<view class="tag-title cu-tag bg-grey light">{{tag.cn}}</view>
+					<view class="tag-wrap">
+						<view class="flex flex-wrap">
+							<view class="tag-text cu-tag" :class="t.showFlag?'bg-olive':'line-olive'" v-for="t in tag.cntags" v-bind:key="t.name"
+							 v-on:tap="clickTag(t.name)">{{t.name}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
 		</view>
 
-<view class="bg-white padding">
-  <view>
-    <view class="flex flex-wrap" v-for="item in possible"  v-if="item.possible.length>0">
-      <!-- {{filters.toFix(item.score)}} -->
-      <view class="possible-title">
-        <view class="cu-tag bg-olive light" v-for="t in item.tags" >{{t}}</view>
-      </view>
-      <view class="possible-wrap">
-        <view class="flex flex-wrap">
-          <view class=" cu-tag star " :class="'star-'+p.level" v-for="p in item.possible" >{{p.name}}</view>
-        </view>
-      </view>
-    </view>
-  </view>
-</view>
+		<view class="bg-white padding">
+			<view>
+				<view class="flex flex-wrap" v-for="item in possible" v-if="item.possible.length>0">
+					<!-- {{filters.toFix(item.score)}} -->
+					<view class="possible-title">
+						<view class="cu-tag bg-olive light" v-for="t in item.tags">{{t}}</view>
+					</view>
+					<view class="possible-wrap">
+						<view class="flex flex-wrap">
+							<view class=" cu-tag star " :class="'star-'+p.level" v-for="p in item.possible">{{p.name}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
 
-<view class="bg-white padding">
-  <view class="cu-bar bg-white solid-bottom">
-    <view class="action">
-      <text class="cuIcon-title text-green"></text>说明
-    </view>
-  </view>
-  <view class="padding-xs flex align-center">
+		<view class="bg-white padding">
+			<view class="cu-bar bg-white solid-bottom">
+				<view class="action">
+					<text class="cuIcon-title text-green"></text>说明
+				</view>
+			</view>
+			<view class="padding-xs flex align-center">
 
-    <view class="flex-sub text-left">
-      <view class="text-df padding">对照游戏中的招募标签选择上面的标签</view>
-      <view class="text-df padding">也可以在输入框中输入，每个标签都需要空格隔开</view>
-      <view class="text-df padding">输入框可以是单字，但如果该字在两个标签中出现，就无法匹配（例如 干员 就无法匹配）；也可以是完整的文本</view>
-      <view class="text-df padding">选择或输入标签后，下面出现的是标签组合可能出现的干员</view>
-      <view class="text-df padding">按星数排序，第一行是最推荐的标签组合</view>
-      <view class="text-df padding">选择完毕点击输入框右边的清空按钮即可重新输入</view>
-    </view>
-  </view>
-  <view class="cu-bar bg-white solid-bottom">
-    <view class="action">
-      <text class="cuIcon-title text-green"></text>
-      <button open-type="share" class="share-btn" hover-class="none">觉得不错？点击分享给你的朋友吧</button>
-    </view>
-  </view>
-  <view class="ad-bottom">
-    <ad unit-id="adunit-84ba84af2ab9997c"></ad>
-  </view>
-  <view class="padding-sm flex align-center">
-    <view class="flex-sub text-left">
-      <view class="text-df padding">对照游戏中的招募标签选择上面的标签</view>
-    </view>
-  </view>
-</view>
+				<view class="flex-sub text-left">
+					<view class="text-df padding">对照游戏中的招募标签选择上面的标签</view>
+					<view class="text-df padding">也可以在输入框中输入，每个标签都需要空格隔开</view>
+					<view class="text-df padding">输入框可以是单字，但如果该字在两个标签中出现，就无法匹配（例如 干员 就无法匹配）；也可以是完整的文本</view>
+					<view class="text-df padding">选择或输入标签后，下面出现的是标签组合可能出现的干员</view>
+					<view class="text-df padding">按星数排序，第一行是最推荐的标签组合</view>
+					<view class="text-df padding">选择完毕点击输入框右边的清空按钮即可重新输入</view>
+				</view>
+			</view>
+			<view class="cu-bar bg-white solid-bottom">
+				<view class="action">
+					<text class="cuIcon-title text-green"></text>
+					<button open-type="share" class="share-btn" hover-class="none">觉得不错？点击分享给你的朋友吧</button>
+				</view>
+			</view>
+			<view class="ad-bottom">
+				<ad unit-id="adunit-84ba84af2ab9997c"></ad>
+			</view>
+			<view class="padding-sm flex align-center">
+				<view class="flex-sub text-left">
+					<view class="text-df padding">对照游戏中的招募标签选择上面的标签</view>
+				</view>
+			</view>
+		</view>
+		<view class="cu-load load-modal" v-if="loadModal">
+			<!-- <view class="cuIcon-emojifill text-orange"></view> -->
+
+			<view class="gray-text">上传中...</view>
+		</view>
+		<view class="cu-modal" :class="modalFlag?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">提示</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-xl">
+					{{modalMsg}}
+				</view>
+			</view>
+		</view>
+
 
 	</view>
 </template>
@@ -105,6 +126,9 @@
 	export default {
 		data() {
 			return {
+				modalMsg: "",
+				modalFlag: false,
+				loadModal: false,
 				keywords: "",
 				tags: [{
 						"cn": "资质",
@@ -252,55 +276,104 @@
 				this.clean();
 				let that = this;
 				console.log("upload start");
-				wx.chooseImage({
+				uni.chooseImage({
 					count: 1,
 					sizeType: ['original', 'compressed'],
 					sourceType: ['album', 'camera'],
 					success(res) {
 						const tempFilePaths = res.tempFilePaths;
 						console.log(tempFilePaths);
-						wx.compressImage({
-							src: tempFilePaths[0],
-							quality: 50,
-							success(res) {
-								const tempFilePath = res.tempFilePath;
-								wx.showLoading({
-									title: '加载中',
-								});
-								wx.uploadFile({
-									url: 'https://ark.dtodo.cn/upload',
-									filePath: tempFilePath,
-									name: 'file',
-									formData: {
-										'user': 'test'
-									},
-									success(res) {
-										wx.hideLoading();
-										if (res.data != '[]') {
-											let tagList = JSON.parse(res.data);
-											for (let i = 0; i < tagList.length; i++) {
-												that.clickTagF(tagList[i], true);
+						const systemInfo = uni.getSystemInfoSync();
+						//没有systemInfo.brand 说明是h5 不支持压缩
+						if (systemInfo.brand) {
+
+							uni.compressImage({
+								src: tempFilePaths[0],
+								quality: 50,
+								success: res => {
+									const tempFilePath = res.tempFilePath;
+									that.showLoading();
+									uni.uploadFile({
+										url: 'https://ark.dtodo.cn/upload',
+										filePath: tempFilePath,
+										name: 'file',
+										formData: {
+											'user': 'test'
+										},
+										success(res) {
+											that.hideLoading();
+											if (res.data != '[]') {
+												let tagList = JSON.parse(res.data);
+												for (let i = 0; i < tagList.length; i++) {
+													that.clickTagF(tagList[i], true);
+												}
+											} else {
+												that.showModal("没有识别的招募标签，请检查图片。", 3000);
+
 											}
-										} else {
-											wx.showToast({
-												title: "没有识别的招募标签，请检查图片。",
-												icon: "none",
-												duration: 2000
-											});
+										},
+										fail(res) {
+											that.hideLoading();
+											that.showModal("没有识别的招募标签，请检查图片。", 3000);
 										}
-									},
-									fail(res) {
-										console.log(res);
-										wx.hideLoading();
+									});
+								},
+								fail: err => {
+									console.log(err)
+								}
+							});
+						} else {
+							that.showLoading();
+							uni.uploadFile({
+								url: 'https://ark.dtodo.cn/upload',
+								filePath: tempFilePaths[0],
+								name: 'file',
+								formData: {
+									'user': 'test'
+								},
+								success(res) {
+									that.hideLoading();
+									if (res.data != '[]') {
+										let tagList = JSON.parse(res.data);
+										for (let i = 0; i < tagList.length; i++) {
+											that.clickTagF(tagList[i], true);
+										}
+									} else {
+										that.showModal("没有识别的招募标签，请检查图片。", 3000);
 									}
-								});
-							}
-						});
+								},
+								fail(res) {
+									that.hideLoading();
+									that.showModal("没有识别的招募标签，请检查图片。", 3000);
+								}
+							});
+						}
+
 					}
 				});
 			},
+			showLoading() {
+				this.loadModal = true;
+			},
+			hideLoading() {
+				this.loadModal = false;
+			},
+			showModal(msg, time) {
+				if (time) {
+					this.modalFlag = true;
+					this.modalMsg = msg;
+					setTimeout(() => {
+						this.modalFlag = false;
+					}, time)
+				} else {
+					this.modalFlag = true;
+				}
+			},
+			hideModal() {
+				this.modalFlag = false;
+			},
 			search(keyword) {
-				
+
 				let keyArray = keyword.split(/\s+/);
 				let that = this;
 				this.tags.forEach((t) => {
@@ -481,7 +554,7 @@
 
 					that.tags_aval = JSON.parse(res.data);
 					console.log(that.tags_aval)
-				}).catch(function(msg){
+				}).catch(function(msg) {
 					console.log(msg)
 				})
 				// app.func.get('/tagsAval', {}, function(response) {
@@ -495,7 +568,7 @@
 				_that.calc();
 			},
 			clickTag(tag) {
-				
+
 				this.clickTagF(tag, true);
 			},
 			clickTagF(tag, clickFlag) {
