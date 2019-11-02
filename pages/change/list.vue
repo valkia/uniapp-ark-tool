@@ -1,6 +1,6 @@
-<template>
+<template name="changeList">
 	<view>
-		<cu-custom bgColor="bg-gradual-blue" :isBack="true">
+		<cu-custom bgColor="bg-gradual-green" :isBack="false">
 			<block slot="backText">返回</block>
 			<block slot="content">线索交换</block>
 		</cu-custom>
@@ -9,7 +9,7 @@
 		    <text class="cuIcon-search"></text>
 		    <input type="text" v-model="keyword" placeholder="搜索需要的线索(数字 空格隔开)"  ></input>
 		  </view>
-		  <button class="cu-btn  bg-green" style="margin-right: 10px;" bindtap="search">搜索</button>
+		  <button class="cu-btn  bg-green" style="margin-right: 10px;" @tap="search">搜索</button>
 		</view>
 		
 		<button class="cu-btn cuIcon lg bg-green fixed-btn" style="bottom: 260rpx;" hover-class="none" open-type="share" data-id="2">
@@ -17,13 +17,13 @@
 		</button>
 		
 		<button class="cu-btn cuIcon lg bg-green fixed-btn">
-		  <navigator class="content" url="/pages/change/new/new" hover-class="none">
+		  <navigator  class="content" url="/pages/change/new" navigateTo hover-class="none">
 		    <text class="cuIcon-add"></text>
 		  </navigator>
 		</button>
 		
 		
-		<view class="cu-item shadow" style="margin-top:55px;margin-bottom: 60px;">
+		<view class="cu-item shadow" style="margin-bottom: 60px;padding-top:55px" >
 		 <view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">现在点击昵称就能直接复制啦~</view>
 		  <view class="cu-list cu-card menu comment solids-top">
 		
@@ -39,14 +39,14 @@
 		          {{change.Remark}}
 		        </view>
 		        <view class="margin-top-xs margin-bottom-xs flex justify-end text-right">
-		          <view class="text-gray text-df "><view bindtap="copyBtn" data-name="change.Username" style="color:#666">{{change.Username}}</view> {{change.Server}} {{change.createdtime}}</view>
+		          <view class="text-gray text-df "><view @tap="copyBtn(change.Username)"  style="color:#666">{{change.Username}}</view> {{change.Server}} {{change.createdtime}}</view>
 		        </view>
 		      </view>
 		
 		    </view>
 		    <view class="cu-item" v-if="changeList.length===0">还没有人发布过这类线索~</view>
 		    <view class="flex flex-direction" style="padding: 0 30rpx;">
-		      <button class="cu-btn line-green lg" bindtap="nextPage" v-if="changeList.length===10">下一页</button>
+		      <button class="cu-btn line-green lg" @tap="nextPage" v-if="changeList.length===10">下一页</button>
 		      <view class="cu-item" v-if="changeList.length<10" style="text-align: center;">没有更多啦~</view>
 		    </view>
 		
@@ -60,6 +60,7 @@
 	export default {
 		data() {
 			return {
+				CustomBar:this.CustomBar,
 				    changeList: [],
 				    keyword: '',
 				    pageIndex: 1,
@@ -120,7 +121,7 @@
 			    getList: function () {
 			      let that = this;
 				  
-				  this.$api.ark.getChangeList({ pageIndex: this.pageIndex, pageSize: this.pageSize, keyword: this.keyword }).then(response => {
+				  this.api.post('/changeList',{ pageIndex: this.pageIndex, pageSize: this.pageSize, keyword: this.keyword }).then(response => {
 				  
 				  	if (response.status === 200) {
 				  				
@@ -132,7 +133,7 @@
 				  				
 				  				
 				  	  that.changeList=list;
-				  	  wx.pageScrollTo({
+				  	  uni.pageScrollTo({
 				  	    scrollTop: 0,
 				  	    duration: 150
 				  	  })
@@ -145,34 +146,32 @@
 			        
 			      // })
 			    },
-			    keywordInput: function (e) {
-			      let keyword = e.detail.value;
-			      this.keyword= keyword;
-			    },
+			    
 			    nextPage: function () {
-			      let page = this.data.pageIndex + 1;
+			      let page = this.pageIndex + 1;
 			      this.pageIndex= page;
 			      this.getList();
 			    },
 			    lastPage: function () {
-			      let page = this.data.pageIndex;
+			      let page = this.pageIndex;
 			      this.pageIndex= page--;
 			      this.getList();
 			    },
 			    // 一键复制事件
-			    copyBtn: function (e) {
-			      wx.setClipboardData({
+			    copyBtn: function (data) {
+			      uni.setClipboardData({
 			        //准备复制的数据
-			        data: e.target.dataset.name,
+			        data: data,
 			        success: function () {
-			          wx.showToast({
+			          uni.showToast({
 			            title: '复制成功',
 			          });
 			        }
 			      });
 			    }
 		},
-		onShow(){
+		mounted() {
+			console.log("mounted");
 			this.getList();
 		}
 	}

@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import App from './App'
 
-import basics from './pages/basics/home.vue'
-Vue.component('basics',basics)
 
-import components from './pages/component/home.vue'
-Vue.component('components',components)
 
-import plugin from './pages/plugin/home.vue'
-Vue.component('plugin',plugin)
+import tags from './pages/tags/tags.vue'
+Vue.component('tags',tags)
+
+import changeList from './pages/change/list.vue'
+Vue.component('changeList',changeList)
+
+import about from './pages/about/about.vue'
+Vue.component('about',about)
 
 import cuCustom from './colorui/components/cu-custom.vue'
 Vue.component('cu-custom',cuCustom)
@@ -27,5 +29,9 @@ app.$mount()
 
 
 import api from './api' // 导入api接口
-
+	import http  from './api/request.js'
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
+Vue.prototype.api = {
+				get: http.get,
+				post: http.post
+			}

@@ -1,26 +1,27 @@
 <template>
 	<view>
-		<basics v-if="PageCur=='basics'"></basics>
-		<components v-if="PageCur=='component'"></components>
-		<plugin v-if="PageCur=='plugin'"></plugin>
+
+		<tags v-if="PageCur=='tags'"></tags>
+		<changeList v-if="PageCur=='changeList'"></changeList>
+		<about v-if="PageCur=='about'"></about>
 		<view class="cu-bar tabbar bg-white shadow foot">
-			<view class="action" @click="NavChange" data-cur="basics">
+			<view class="action" @click="NavChange" data-cur="tags">
 				<view class='cuIcon-cu-image'>
-					<image :src="'/static/tabbar/basics' + [PageCur=='basics'?'_cur':''] + '.png'"></image>
+					<text class=" lg " :class="PageCur=='tags'?'text-green cuIcon-friendaddfill':'text-gray cuIcon-friendadd'"></text>
 				</view>
-				<view :class="PageCur=='basics'?'text-green':'text-gray'">元素</view>
+				<view :class="PageCur=='tags'?'text-green':'text-gray'">招募</view>
 			</view>
-			<view class="action" @click="NavChange" data-cur="component">
+			<view class="action" @click="NavChange" data-cur="changeList">
 				<view class='cuIcon-cu-image'>
-					<image :src="'/static/tabbar/component' + [PageCur == 'component'?'_cur':''] + '.png'"></image>
+					<text class=" lg " :class="PageCur=='changeList'?'text-green cuIcon-formfill':'text-gray cuIcon-form'"></text>
 				</view>
-				<view :class="PageCur=='component'?'text-green':'text-gray'">组件</view>
+				<view :class="PageCur=='changeList'?'text-green':'text-gray'">线索交换</view>
 			</view>
-			<view class="action" @click="NavChange" data-cur="plugin">
+			<view class="action" @click="NavChange" data-cur="about">
 				<view class='cuIcon-cu-image'>
-					<image :src="'/static/tabbar/plugin' + [PageCur == 'plugin'?'_cur':''] + '.png'"></image>
+					<text class=" lg " :class="PageCur=='about'?'text-green cuIcon-homefill':'text-gray cuIcon-home'"></text>
 				</view>
-				<view :class="PageCur=='plugin'?'text-green':'text-gray'">扩展</view>
+				<view :class="PageCur=='about'?'text-green':'text-gray'">关于</view>
 			</view>
 		</view>
 	</view>
@@ -30,7 +31,7 @@
 	export default {
 		data() {
 		return {
-				PageCur: 'basics'
+				PageCur: 'tags'
 			}
 		},
 		methods: {
@@ -42,5 +43,6 @@
 </script>
 
 <style>
+
 
 </style>

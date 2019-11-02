@@ -1,12 +1,12 @@
-<template>
+<template name="tags">
 	<view>
-		<cu-custom bgColor="bg-gradual-blue" :isBack="true">
+		<cu-custom bgColor="bg-gradual-green" :isBack="false">
 			<block slot="backText">返回</block>
 			<block slot="content">明日方舟助手</block>
 		</cu-custom>
 		<!-- style="top:{{CustomBar}}px" -->
 		<!-- v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }" -->
-		<view class="cu-bar bg-white search fixed" v-bind:style="{top:CustomBar+'px'}">
+		<view class="cu-bar bg-white search fixed" v-bind:style="'top:'+CustomBar+'px'">
 			<view class="search-form ">
 				<text class="cuIcon-search"></text>
 				<input type="text" v-model="keywords" placeholder="关键字（空格隔开，支持模糊搜索）" confirm-type="search" v-on:input="search(keywords)"></input>
@@ -15,13 +15,12 @@
 			<button class="cu-btn  bg-grey" style="margin-right: 10px;" @tap="upload">上传</button>
 		</view>
 
-		<view class="bg-white" style="padding: 0px;">
+		<view class="bg-white" style="padding: 0px;padding-top:55px">
 			<!-- <view class="flex flex-wrap">
  {{checkedTags}}
 </view> -->
 			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">新增识图功能，点击右边上传按钮上传游戏中的公开招募界面截图即可</view>
 			<view class="flex flex-wrap" style="padding:5px 5px 0 5px">
-				<!--  data-title='{{item.name}}' class="tag-number cu-tag {{item.showFlag?'bg-olive':'line-olive'}}" -->
 				<view v-for="item in showStars" v-bind:key="item.name" v-on:tap="clickStars(item.name)" class="tag-number cu-tag"
 				 :class="item.showFlag?'bg-olive':'line-olive'">{{item.name}}</view>
 			</view>
@@ -43,14 +42,14 @@
 
 		<view class="bg-white padding">
 			<view>
-				<view class="flex flex-wrap" v-for="item in possible" v-if="item.possible.length>0">
+				<view class="flex flex-wrap" v-for="item in possible" v-if="item.possible.length>0" v-bind:key="item">
 					<!-- {{filters.toFix(item.score)}} -->
 					<view class="possible-title">
-						<view class="cu-tag bg-olive light" v-for="t in item.tags">{{t}}</view>
+						<view class="cu-tag bg-olive light" v-for="t in item.tags" v-bind:key="t">{{t}}</view>
 					</view>
 					<view class="possible-wrap">
 						<view class="flex flex-wrap">
-							<view class=" cu-tag star " :class="'star-'+p.level" v-for="p in item.possible">{{p.name}}</view>
+							<view class=" cu-tag star " :class="'star-'+p.level" v-for="p in item.possible" v-bind:key="p.name">{{p.name}}</view>
 						</view>
 					</view>
 				</view>
@@ -124,8 +123,10 @@
 		}
 	}
 	export default {
+		name:"tags",
 		data() {
 			return {
+				CustomBar:this.CustomBar,
 				modalMsg: "",
 				modalFlag: false,
 				loadModal: false,
@@ -241,7 +242,7 @@
 				tags_aval: {} = {},
 				checkedTags: [] = [],
 				checkedTagsTL: [] = [],
-				possible: [] = [{}],
+				possible: [] ,
 				optStars: [] = [""],
 				showStars: [] = [{
 					name: "清空",
@@ -267,11 +268,13 @@
 				}],
 			}
 		},
+		mounted() {
+			console.log("mounted");
+			this.init();
+		},
 		methods: {
 
-			onLoad() {
-				this.init();
-			},
+			
 			upload() {
 				this.clean();
 				let that = this;
@@ -550,7 +553,7 @@
 			init() {
 				let _that = this;
 				var that = this;
-				this.$api.article.tagsAval().then(res => {
+				this.api.get('/tagsAval',{}).then(res => {
 
 					that.tags_aval = JSON.parse(res.data);
 					console.log(that.tags_aval)
@@ -619,9 +622,7 @@
 				_that.calc();
 			}
 		},
-		onReady() {
-			this.init();
-		}
+		
 	}
 </script>
 
