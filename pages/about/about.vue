@@ -6,7 +6,7 @@
 		    <view class="text-xl">明日方舟助手
 		      <text class="text-df">{{version}}</text>
 		    </view>
-		    <image src="../../static/wave.gif" mode="scaleToFill" class="gif-wave"></image>
+		    <image src="https://ws1.sinaimg.cn/large/007RRq42gy1g8k81024qxg30be03wx6n.gif" mode="scaleToFill" class="gif-wave"></image>
 		  </view>
 		  <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
 		    <view class="cu-item arrow">
