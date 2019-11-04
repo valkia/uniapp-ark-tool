@@ -297,7 +297,7 @@
 									const tempFilePath = res.tempFilePath;
 									that.showLoading();
 									uni.uploadFile({
-										url: 'https://ark.dtodo.cn/upload',
+										url: 'https://ark.dtodo.cn/ark/upload',
 										filePath: tempFilePath,
 										name: 'file',
 										formData: {

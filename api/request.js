@@ -1,5 +1,5 @@
-var host = 'https://ark.dtodo.cn/ark'; //正式域名
-//var rootDocment = 'http://127.0.0.1:8080/ark';//本地开发
+//var host = 'https://ark.dtodo.cn/ark'; //正式域名
+var host = 'http://127.0.0.1:7001/ark';//本地开发
 //var rootDocment = 'http://176.122.161.8:8080/ark';//正式域名
 
 function success(res, resolve, reject) {
@@ -32,14 +32,12 @@ function fail() {
 }
 
 function post(url, data) {
+	
 	return new Promise(function(resolve, reject) {
 		uni.request({
 			url: host + url,
 			data: data,
 			method: 'post',
-			header: {
-				'Content-Type': 'application/json'
-			},
 			success: function(res) {
 				success(res, resolve, reject);
 			},

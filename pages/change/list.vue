@@ -32,14 +32,14 @@
 		      <view class="content">
 		        <view class="bg-grey padding-sm radius margin-top-xs  text-sm">
 		          <view class="flex">
-		            <view> {{change.Have}} 换 {{change.Need}} </view>
+		            <view> {{change.have}} 换 {{change.need}} </view>
 		          </view>
 		        </view>
 		        <view class="margin-top-xs text-gray text-content text-df">
-		          {{change.Remark}}
+		          {{change.remark}}
 		        </view>
 		        <view class="margin-top-xs margin-bottom-xs flex justify-end text-right">
-		          <view class="text-gray text-df "><view @tap="copyBtn(change.Username)"  style="color:#666">{{change.Username}}</view> {{change.Server}} {{change.createdtime}}</view>
+		          <view class="text-gray text-df "><view @tap="copyBtn(change.username)"  style="color:#666">{{change.username}}</view> {{change.server}} {{change.createdtime}}</view>
 		        </view>
 		      </view>
 		
@@ -128,7 +128,7 @@
 				  	  let list = response.data;
 				  				
 				  	  list.forEach((item) => {
-				  	    item.createdtime = that.getTimeAgo(new Date(item.CreatedAt).getTime());
+				  	    item.createdtime = that.getTimeAgo(new Date(item.createdAt).getTime());
 				  	  })
 				  				
 				  				
