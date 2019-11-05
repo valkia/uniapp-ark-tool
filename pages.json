@@ -20,7 +20,11 @@
 			"path": "pages/about/log",
 			"style": {}
 		}
-	],
+	    ,{
+            "path" : "pages/material/material",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"mp-alipay": {
 			/* 支付宝小程序特有相关 */

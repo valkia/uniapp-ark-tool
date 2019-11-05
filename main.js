@@ -4,34 +4,34 @@ import App from './App'
 
 
 import tags from './pages/tags/tags.vue'
-Vue.component('tags',tags)
+Vue.component('tags', tags)
 
 import changeList from './pages/change/list.vue'
-Vue.component('changeList',changeList)
+Vue.component('changeList', changeList)
 
 import about from './pages/about/about.vue'
-Vue.component('about',about)
+Vue.component('about', about)
 
 import cuCustom from './colorui/components/cu-custom.vue'
-Vue.component('cu-custom',cuCustom)
+Vue.component('cu-custom', cuCustom)
 
 Vue.config.productionTip = false
 
 App.mpType = 'app'
 
 const app = new Vue({
-    ...App
+	...App
 })
 app.$mount()
 
- 
+
 
 
 
 import api from './api' // 导入api接口
-	import http  from './api/request.js'
+import http from './api/request.js'
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
 Vue.prototype.api = {
-				get: http.get,
-				post: http.post
-			}
+	get: http.get,
+	post: http.post
+}
