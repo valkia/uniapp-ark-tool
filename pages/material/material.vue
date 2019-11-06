@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<div id="arkn-material" class="material">
+		<div id="arkn-material">
 			<div class="mdui-row">
 				<!-- 选项 -->
 				<div class="mdui-col-lg-6">
@@ -35,28 +35,40 @@
 							</tr>
 							<tr>
 								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn">选项</button></td>
-								<td>
-									<mdui-switch v-for="(zh, en) in settingZh" :key="en" v-model="setting[en]" :html="zh"></mdui-switch>
-								</td>
+
+								<view class="cu-form-group margin-top" v-for="(zh, en) in settingZh" :key="en" v-model="setting[en]">
+									<view class="title">{{zh}}</view>
+									<switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch>
+								</view>
+
+								<!-- <td>
+									<switch  :html="zh"  @change="SwitchA" :class="setting[en]?'checked':''" :checked="setting[en]?true:false"></switch>
+								</td> -->
 							</tr>
 							<tr>
 								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn">操作</button></td>
 								<td>
-									<button class="mdui-btn mdui-ripple mdui-btn-dense mdui-color-red tag-btn" @click="reset()">重置需求&amp;已有</button>
-									<button class="mdui-btn mdui-ripple mdui-btn-dense mdui-color-red tag-btn" @click="reset('need')">重置需求</button>
-									<button class="mdui-btn mdui-ripple mdui-btn-dense mdui-color-red tag-btn" @click="reset('have')">重置已有</button>
-									<button class="mdui-btn mdui-ripple mdui-btn-dense mdui-color-green-600 tag-btn" @click="saveData"><i class="mdui-icon material-icons">file_upload</i>备份</button>
-									<button class="mdui-btn mdui-ripple mdui-btn-dense mdui-color-blue-600 tag-btn" @click="restoreData"><i class="mdui-icon material-icons">file_download</i>恢复</button>
-									<button class="mdui-btn mdui-ripple mdui-btn-dense mdui-color-pink tag-btn" @click="resetPenguinData">强制更新掉落数据</button>
+									<button class="cu-btn round bg-olive" @click="reset()">重置需求&amp;已有</button>
+									<button class="cu-btn round bg-olive" @click="reset('need')">重置需求</button>
+									<button class="cu-btn round bg-olive" @click="reset('have')">重置已有</button>
+									<button class="cu-btn round bg-olive" @click="saveData"><i class="mdui-icon material-icons">file_upload</i>备份</button>
+									<button class="cu-btn round bg-olive" @click="restoreData"><i class="mdui-icon material-icons">file_download</i>恢复</button>
+									<button class="cu-btn round bg-olive" @click="resetPenguinData">强制更新掉落数据</button>
 								</td>
 							</tr>
 							<tr>
 								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn">计算</button></td>
 								<td>
-									<button id="ark-planner-btn" class="mdui-btn mdui-ripple mdui-btn-dense mdui-color-purple tag-btn" :disabled="apbDisabled"
-									 @click="apbDisabled=true;initPlanner().then(()=>{showPlan();apbDisabled=false;});">我该刷什么图</button>
-									<mdui-switch class="mdui-m-l-2" v-model="setting.planIncludeEvent" html="包括活动关卡"></mdui-switch>
-									<mdui-switch v-model="setting.planCardExpFirst" html="需求狗粮"></mdui-switch>
+									<button id="ark-planner-btn" class="cu-btn round bg-olive" :disabled="apbDisabled" @click="apbDisabled=true;initPlanner().then(()=>{showPlan();apbDisabled=false;});">我该刷什么图</button>
+
+									<view class="cu-form-group margin-top">
+										<view class="title">包括活动关卡</view>
+										<switch class="mdui-m-l-2" v-model="setting.planIncludeEvent"></switch>
+									</view>
+									<view class="cu-form-group margin-top">
+										<view class="title">需求狗粮</view>
+										<switch class="mdui-m-l-2" v-model="setting.planCardExpFirst"></switch>
+									</view>
 								</td>
 							</tr>
 						</tbody>
@@ -1016,7 +1028,7 @@
 	};
 </script>
 
-<style>
+<style scoped>
 	#arkn-material .material .mdui-btn.small-btn {
 		margin: -4px 0;
 	}
@@ -1100,10 +1112,6 @@
 		display: inline-block;
 	}
 
-	.material:not(.material-simple) {
-		width: 375px;
-	}
-
 	.material,
 	.material .mdui-card-header-title {
 		transition: all 0.3s;
@@ -1141,7 +1149,7 @@
 	.material .mdui-card-header-avatar {
 		width: 80px;
 		height: 80px;
-		transform: scale(1.1);
+		transform: scale(1);
 		justify-content: center;
 	}
 
@@ -1349,75 +1357,143 @@
 		left: 4px;
 		top: 1px;
 	}
-	
+
 	.star-6 {
 		background: #f0e028 !important;
 	}
-	
+
 	.star-5 {
 		background: #f0a94d !important;
 	}
-	
+
 	.star-4 {
 		background: #8960ce !important;
 		color: white;
 	}
-	
+
 	.star-3 {
 		background: #618bf5 !important;
 		color: white;
 	}
-	
+
 	.star-2 {
 		background: #dedede !important;
 	}
-	
+
 	.star-1 {
 		background: #dedede !important;
 	}
-	
+
 	.mdui-card {
-	    position: relative;
-	    -webkit-box-sizing: border-box;
-	    box-sizing: border-box;
-	    overflow: hidden;
-	    color: #000;
-	    background-color: #fff;
-	    border-radius: 2px;
+		position: relative;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		overflow: hidden;
+		color: #000;
+		background-color: #fff;
+		border-radius: 2px;
+	}
+
+	.mdui-card-header {
+		position: relative;
+		height: 72px;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		padding: 0px;
+	}
+
+	.mdui-valign {
+		display: -webkit-box !important;
+		display: -webkit-flex !important;
+		display: -ms-flexbox !important;
+		display: flex !important;
+		-webkit-box-align: center !important;
+		-webkit-align-items: center !important;
+		-ms-flex-align: center !important;
+		align-items: center !important;
+	}
+
+	.mdui-card-header-title {
+		display: block;
+		margin-left: 52px;
+		overflow: hidden;
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 20px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		opacity: .87;
+	}
+
+	.mdui-card-header-avatar {
+		float: left;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+	}
+
+	.mdui-col,
+	[class*=mdui-col-lg-],
+	[class*=mdui-col-md-],
+	[class*=mdui-col-sm-],
+	[class*=mdui-col-xl-],
+	[class*=mdui-col-xs-] {
+		position: relative;
+		min-height: 1px;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		padding-right: 8px;
+		padding-left: 8px;
+	}
+
+	.mobile-screen .rare-title {
+		margin-left: 8px;
+	}
+
+	.mdui-typo {
+		line-height: 1.8;
+		word-wrap: break-word;
+	}
+
+	.mdui-typo h2 {
+		padding-bottom: 7.2px;
+	}
+
+	.mdui-typo h1,
+	.mdui-typo h2 {
+		border-bottom: 1px solid rgba(0, 0, 0, .1);
+	}
+
+	.mdui-typo h2 {
+		font-size: 1.8em;
+	}
+
+	.mdui-typo h1,
+	.mdui-typo h2,
+	.mdui-typo h3,
+	.mdui-typo h4,
+	.mdui-typo h5,
+	.mdui-typo h6 {
+		margin-top: 1.2em;
+		margin-bottom: .6em;
+		font-family: inherit;
+		font-weight: 400;
+		line-height: 1.35;
+		color: inherit;
+	}
+
+	#arkn-material {
+		background: #fff;
 	}
 	
-.mdui-card-header {
-    position: relative;
-    height: 72px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 0px;
-}
-	.mdui-valign {
-	    display: -webkit-box!important;
-	    display: -webkit-flex!important;
-	    display: -ms-flexbox!important;
-	    display: flex!important;
-	    -webkit-box-align: center!important;
-	    -webkit-align-items: center!important;
-	    -ms-flex-align: center!important;
-	    align-items: center!important;
+	.material:not(.material-simple) {
+	    -webkit-box-shadow: none;
+	    box-shadow: none;
+	    width: 100%;
+	    background: transparent;
 	}
-	.mdui-card-header-title {
-	    display: block;
-	    margin-left: 52px;
-	    overflow: hidden;
-	    font-size: 16px;
-	    font-weight: 500;
-	    line-height: 20px;
-	    text-overflow: ellipsis;
-	    white-space: nowrap;
-	    opacity: .87;
-	}
-	.mdui-card-header-avatar {
-	    float: left;
-	    width: 40px;
-	    height: 40px;
-	    border-radius: 50%;
+	.material {
+	    min-width: 275px;
+	    display: inline-block;
 	}
 </style>
