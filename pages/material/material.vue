@@ -23,12 +23,30 @@
 									<!-- 预设 -->
 									<vue-tags-input id="preset" ref="presetInput" v-model="preset" :tags="selected.presets" :allow-edit-tags="false"
 									 :add-from-paste="false" :add-on-blur="false" :autocomplete-items="presetItems" :add-only-from-autocomplete="true"
-									 :autocomplete-always-open="true" placeholder="输入干员名/拼音/拼音首字母" autocomplete="off" :class="`tags-input${preset.length===0?' empty':''}`"
+									 :autocomplete-always-open="false" placeholder="输入干员名/拼音/拼音首字母" autocomplete="off" 
 									 @tags-changed="usePreset" @before-adding-tag="obj=>showPreset(obj)">
-										<div slot="autocomplete-item" slot-scope="props" @click="props.performAdd(props.item)" class="mdui-list-item mdui-p-y-0 mdui-p-x-1">
-											<div class="mdui-list-item-avatar"><img class="no-pe" :key="`head-${props.item.text}`" :src="$root.avatar(addition[props.item.text])" /></div>
-											<div class="mdui-list-item-content mdui-p-y-0 mdui-m-l-1">{{ props.item.text }}</div>
-										</div>
+										<view slot="autocomplete-item" slot-scope="props" @click="props.performAdd(props.item)" class="cu-list menu-avatar">
+											<view class="cu-item">
+											<view class="cu-avatar round lg"><img class="cu-avatar round lg" :key="`head-${props.item.text}`" :src="avatar(addition[props.item.text])" /><!--  --></view>
+											<view class="content flex-sub">{{ props.item.text }}</view>
+											</view>
+										</view>
+										<!-- <view class="cu-list menu-avatar">
+											<view class="cu-item">
+												<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
+												<view class="content flex-sub">
+													<view class="text-grey">正义天使 凯尔</view>
+													<view class="text-gray text-sm flex justify-between">
+														十天前
+														<view class="text-gray text-sm">
+															<text class="cuIcon-attentionfill margin-lr-xs"></text> 10
+															<text class="cuIcon-appreciatefill margin-lr-xs"></text> 20
+															<text class="cuIcon-messagefill margin-lr-xs"></text> 30
+														</view>
+													</view>
+												</view>
+											</view>
+										</view> -->
 										<span class="no-sl" slot="tag-center" slot-scope="props" @click="showPreset(props,true)">{{ props.tag.text }}</span>
 									</vue-tags-input>
 								</td>
@@ -212,7 +230,7 @@
 				</div>
 			</div>
 			<!-- Planner -->
-			<div id="planner" class="mdui-dialog mdui-typo">
+			<!-- <div id="planner" class="mdui-dialog mdui-typo">
 				<template v-if="plan">
 					<div class="mdui-dialog-title">
 						结果仅供参考
@@ -254,7 +272,57 @@
 				<div class="mdui-dialog-actions">
 					<button class="mdui-btn mdui-ripple" mdui-dialog-cancel>关闭</button>
 				</div>
-			</div>
+			</div> -->
+			
+			<view class="cu-modal" :class="modalName=='planner'?'show':''">
+				<view class="cu-dialog" v-if="plan">
+					<view class="cu-bar bg-white justify-end">
+						<view class="content">刷图计划</view>
+						<view class="action" @tap="hideModal('planner')">
+							<text class="cuIcon-close text-red"></text>
+						</view>
+					</view>
+					<view class="padding-xl">
+						<div class="mdui-dialog-title">
+							结果仅供参考
+							<p class="mdui-m-b-0 mdui-m-t-2" style="font-size:15px">
+								预计消耗理智：<code>{{plan.cost}}</code><br />
+								<span class="mdui-text-color-blue-900">关卡</span> × <span class="mdui-text-color-pink-accent">次数</span>&nbsp;&nbsp;(<span
+								 class="mdui-text-color-yellow-900">理智</span>)&nbsp;&nbsp;<span class="mdui-text-color-black blod-text">需求产物</span>&nbsp;&nbsp;<span
+								 style="color:rgba(0,0,0,.7);">副产物</span>
+							</p>
+						</div>
+						<div class="mdui-dialog-content">
+							<div class="stage" v-for="stage in plan.stages" :key="stage.code">
+								<h5 class="h-ul"><span class="mdui-text-color-blue-900">{{stage.code}}</span> × <span class="mdui-text-color-pink-accent">{{stage.times}}</span>&nbsp;&nbsp;(<span
+									 class="mdui-text-color-yellow-900">{{stage.cost}}</span>)</h5>
+								<div class="num-item-list">
+									<arkn-num-item v-for="drop in stage.drops" :key="`${stage.code}-${drop.name}`" :t="materialsTable[drop.name].rare"
+									 :img="materialsTable[drop.name].img" :lable="drop.name" :num="drop.num" :color="gaps[drop.name][0]>0?'mdui-text-color-black blod-text':false" />
+									<arkn-num-item t="4" img="G-4-1" lable="龙门币" :num="num10k(stage.money)" />
+									<arkn-num-item v-if="stage.cardExp>0" t="5" img="E-5-1" lable="狗粮经验值" :num="num10k(stage.cardExp)" />
+								</div>
+							</div>
+							<div class="stage" v-if="plan.synthesis.length>0">
+								<h5 class="h-ul">需要合成</h5>
+								<div class="num-item-list">
+									<arkn-num-item v-for="m in plan.synthesis" :key="`合成-${m.name}`" :t="materialsTable[m.name].rare" :img="materialsTable[m.name].img"
+									 :lable="m.name" :num="m.num" />
+									<arkn-num-item t="4" img="G-4-1" lable="消耗龙门币" :num="num10k(plan.synthesisCost)" />
+								</div>
+							</div>
+							<div class="stage">
+								<h5 class="h-ul">总计获得</h5>
+								<div class="num-item-list">
+									<arkn-num-item t="4" img="G-4-1" lable="龙门币" :num="num10k(plan.money)" />
+									<arkn-num-item v-if="plan.cardExp>0" t="5" img="E-5-1" lable="狗粮经验值" :num="num10k(plan.cardExp)" />
+								</div>
+							</div>
+						</div>
+					</view>
+				</view>
+			</view>
+			
 			<!-- 关卡掉落详情 -->
 			<div id="drop-detail" class="mdui-dialog mdui-typo">
 				<template v-if="dropDetails">
@@ -283,11 +351,11 @@
 <script>
 	import ArknNumItem from '../../components/ArknNumItem';
 	import MaterialReadme from '../../components/MaterialReadme';
-	//import VueTagsInput from '@johmun/vue-tags-input';
+	import VueTagsInput from '@johmun/vue-tags-input';
 	import _ from 'lodash';
 	// import { Base64 } from 'js-base64';
 	// import Ajax from '../utils/ajax';
-	// import linprog from 'javascript-lp-solver/src/solver';
+	 import linprog from 'javascript-lp-solver/src/solver';
 
 	import ADDITION from '../../data/addition.json';
 	import ELITE from '../../data/elite.json';
@@ -327,7 +395,7 @@
 		name: "arkn-material",
 		//VueTagsInput,
 		components: {
-
+			VueTagsInput,
 			MaterialReadme,
 			ArknNumItem
 		},
@@ -363,7 +431,7 @@
 				simpleMode: '简洁模式',
 				hideIrrelevant: '隐藏无关素材',
 				translucentDisplay: '半透明显示已满足需求的素材',
-				stopSynthetiseLE3: '不计算<span class="mdui-text-color-blue-600">稀有度3</span>及以下材料的合成需求',
+				stopSynthetiseLE3: '不计算稀有度3及以下材料的合成需求',
 				showDropProbability: '显示掉落概率(%)及期望理智(⚡)'
 			},
 			color: {
@@ -429,6 +497,7 @@
 			}
 		},
 		computed: {
+			
 			madeofTooltips() {
 				return _.transform(MATERIAL, (o, {
 					name,
@@ -636,7 +705,7 @@
 				};
 
 				const result = linprog.Solve(model);
-
+				console.log(result);
 				if (!result.feasible) return false;
 				delete result.feasible;
 				delete result.result;
@@ -702,6 +771,15 @@
 			}
 		},
 		methods: {
+			avatar({ img, full }) {
+			    return `/static/img/avatar/${full}.${img}`;
+			},
+			showModal(string) {
+				this.modalName = string
+			},
+			hideModal() {
+				this.modalName = null
+			},
 			num10k(num) {
 				return num > 100000 ? `${_.round(num / 10000, 2)}w` : num;
 			},
@@ -852,21 +930,40 @@
 				if (this.plannerInited) return;
 
 				if (!this.penguinData.data || this.penguinData.expire < _.now()) {
-					const tip = this.$root.snackbar({
-						message: '正在从企鹅物流加载/更新数据',
-						timeout: 0,
-						closeOnOutsideClick: false
+					// const tip = this.$root.snackbar({
+					// 	message: '正在从企鹅物流加载/更新数据',
+					// 	timeout: 0,
+					// 	closeOnOutsideClick: false
+					// });
+					wx.showToast({
+						title: "正在从企鹅物流加载/更新数据",
+						icon: "none",
+						duration: 2000
 					});
-					const data = await Ajax.get(penguinURL, true).catch(() => false);
-					tip.close();
+					
+					const data = await this.getByUrl(penguinURL,{}).catch(() => false);
+					//const data = await Ajax.get(penguinURL, true).catch(() => false);
+					//tip.close();
 					if (data) {
 						this.penguinData.data = data;
 						this.penguinData.expire = _.now() + 3 * 24 * 60 * 60 * 1000;
 						localStorage.setItem('material.penguinData', JSON.stringify(this.penguinData));
 					} else {
-						if (this.penguinData.data) this.$root.snackbar('数据更新失败，使用旧数据进行计算');
+						if (this.penguinData.data) {
+							wx.showToast({
+								title: "数据更新失败，使用旧数据进行计算",
+								icon: "none",
+								duration: 2000
+							});
+						}
+						//this.$root.snackbar('数据更新失败，使用旧数据进行计算');
 						else {
-							this.$root.snackbar('数据加载失败，请检查网络连接');
+							//this.$root.snackbar('数据加载失败，请检查网络连接');
+							wx.showToast({
+								title: "数据加载失败，请检查网络连接",
+								icon: "none",
+								duration: 2000
+							});
 							return;
 						}
 					}
@@ -954,12 +1051,62 @@
 				this.plannerInited = true;
 			},
 			showPlan() {
-				const Mdui = this.$root.Mdui;
-				if (this.plan.cost === 0) Mdui.alert('根本不需要计算啦~', () => {}, {
-					confirmText: '好吧'
-				});
-				else this.$nextTick(() => this.plannerDialog.open());
+				//const Mdui = this.$root.Mdui;
+				if (this.plan.cost === 0) {
+					alert("不用计算");
+				}
+				else this.$nextTick(() => this.showModal('planner'));
 			},
+			
+			getByUrl(url, data) {
+				return new Promise(function(resolve, reject) {
+					uni.request({
+						url: url,
+						data: data,
+						method: 'get',
+						header: {
+							'Content-Type': 'application/json'
+						},
+						success: function(res) {
+							
+								if (res.statusCode === 404) {
+									uni.showToast({
+										title: "系统升级中，请稍等",
+										icon: "none",
+										duration: 2000
+									})
+									return;
+								} else if (res.statusCode === 200) {
+									resolve(res.data);
+								} else {
+									uni.showToast({
+										title: "系统出错啦，请联系管理员",
+										icon: "none",
+										duration: 2000
+									})
+									return;
+								}
+							
+							
+							
+						},
+						fail: function(err) {
+							
+								uni.showToast({
+									title: "网络错误或服务器升级中",
+									icon: "none",
+									duration: 2000
+								})
+								return;
+							
+						}
+					})
+			
+			
+				});
+			
+			},
+			
 			resetPenguinData() {
 				localStorage.removeItem('material.penguinData');
 				window.location.reload();
@@ -1028,7 +1175,7 @@
 	};
 </script>
 
-<style scoped>
+<style>
 	#arkn-material .material .mdui-btn.small-btn {
 		margin: -4px 0;
 	}
@@ -1103,9 +1250,6 @@
 		font-size: 14px;
 	}
 
-	.vue-tags-input.empty .ti-autocomplete {
-		display: none;
-	}
 
 	.material {
 		min-width: 275px;
@@ -1495,5 +1639,37 @@
 	.material {
 	    min-width: 275px;
 	    display: inline-block;
+	}
+	.mdui-list-item-avatar {
+	    min-width: 40px;
+	    max-width: 40px;
+	    height: 40px;
+	    margin-top: 8px;
+	    margin-bottom: 8px;
+	    line-height: 40px;
+	    color: #fff;
+	    text-align: center;
+	    background-color: #bdbdbd;
+	    border-radius: 50%;
+	}
+	.mdui-list-item-avatar img {
+	    width: 100%;
+	    height: 100%;
+	    border-radius: 50%;
+	}
+	.mdui-list-item-content {
+	    padding-top: 14px;
+	    padding-bottom: 14px;
+	    font-size: 16px;
+	    font-weight: 400;
+	    line-height: 20px;
+	    -webkit-box-flex: 1;
+	    -webkit-flex-grow: 1;
+	    -ms-flex-positive: 1;
+	    flex-grow: 1;
+	}
+	.cu-list.menu-avatar>.cu-item{
+		    height: 60px;
+		    background-color: unset;
 	}
 </style>
