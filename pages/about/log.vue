@@ -41,7 +41,15 @@
 	export default {
 		data() {
 			return {
-				logs: [{
+				logs: [
+					{
+						version: "v1.3.2",
+						date: "2019/11/25",
+						details: [
+							"增加了好友添加的模块"
+						]
+					},
+					{
 					version: "v1.3.1",
 					date: "2019/11/02",
 					details: [

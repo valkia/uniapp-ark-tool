@@ -2,45 +2,46 @@
 	<view>
 		<cu-custom bgColor="bg-gradual-green" :isBack="true">
 			<block slot="backText">返回</block>
-			<block slot="content">线索发布</block>
+			<block slot="content">{{TabCur==0?'信息发布':'线索发布'}}</block>
 		</cu-custom>
 		<view class="bg-white padding">
-			<view class="cu-bar bg-white solid-bottom">
-				<view class="action">
-					<text class="cuIcon-title text-green"></text>选择你需要的线索
+			<view v-if="TabCur==1">
+				<view class="cu-bar bg-white solid-bottom">
+					<view class="action">
+						<text class="cuIcon-title text-green"></text>选择你需要的线索
+					</view>
 				</view>
-			</view>
-			<view class="padding-xs flex align-center">
-				<view class="flex-sub text-left">
-					<view class="flex flex-wrap">
-						<view class="tag-wrap">
-							<view class="flex flex-wrap">
-								<view class="tag-text cu-tag" :class="clue.showFlag?'bg-olive':'line-olive'" v-for="(clue,index) in clueList['need']"
-								 @tap="clickClue(index,'need')">{{clue.name}}</view>
+				<view class="padding-xs flex align-center">
+					<view class="flex-sub text-left">
+						<view class="flex flex-wrap">
+							<view class="tag-wrap">
+								<view class="flex flex-wrap">
+									<view class="tag-text cu-tag" :class="clue.showFlag?'bg-olive':'line-olive'" v-for="(clue,index) in clueList['need']"
+									 @tap="clickClue(index,'need')">{{clue.name}}</view>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="cu-bar bg-white solid-bottom">
+					<view class="action">
+						<text class="cuIcon-title text-green"></text>选择你用来交换的线索
+					</view>
+				</view>
+				<view class="padding-xs flex align-center">
+					<view class="flex-sub text-left">
+						<view class="flex flex-wrap">
+							<view class="tag-wrap">
+								<view class="flex flex-wrap">
+									<view class="tag-text cu-tag" :class="clue.showFlag?'bg-olive':'line-olive'" v-for="(clue,index) in clueList['have']"
+									 @tap="clickClue(index,'have')">{{clue.name}}</view>
+								</view>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
-
-			<view class="cu-bar bg-white solid-bottom">
-				<view class="action">
-					<text class="cuIcon-title text-green"></text>选择你用来交换的线索
-				</view>
-			</view>
-			<view class="padding-xs flex align-center">
-				<view class="flex-sub text-left">
-					<view class="flex flex-wrap">
-						<view class="tag-wrap">
-							<view class="flex flex-wrap">
-								<view class="tag-text cu-tag" :class="clue.showFlag?'bg-olive':'line-olive'" v-for="(clue,index) in clueList['have']"
-								 @tap="clickClue(index,'have')">{{clue.name}}</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-
 			<form>
 				<view class="cu-form-group margin-top">
 					<view class="title">游戏ID</view>
@@ -59,7 +60,11 @@
 					<input placeholder="请输入备注（最多30个字）" maxlength="30" v-model='remark'></input>
 				</view>
 
-				<view class="padding flex flex-direction">
+				<view v-if="TabCur==0" class="padding flex flex-direction">
+					<button class="cu-btn bg-green margin-tb-sm lg" v-on:tap="saveBuddy" :disabled="loading">
+						<text class="cuIcon-loading2 iconfont-spin" v-if="loading"></text> 提交</button>
+				</view>
+				<view v-if="TabCur==1" class="padding flex flex-direction">
 					<button class="cu-btn bg-green margin-tb-sm lg" v-on:tap="saveChange" :disabled="loading">
 						<text class="cuIcon-loading2 iconfont-spin" v-if="loading"></text> 提交</button>
 				</view>
@@ -98,7 +103,8 @@
 	export default {
 		data() {
 			return {
-				CustomBar:this.CustomBar,
+				TabCur: 0, //0是添加好友，1是线索交换
+				CustomBar: this.CustomBar,
 				id: "",
 				server: "",
 				serverIndex: null,
@@ -249,11 +255,14 @@
 					remark: this.remark,
 					clueList: this.clueList
 				};
+
+
+
 				let that = this;
 				let changeClueStr = this.id + " " + this.server + " " + haveStr + "换 " + needStr;
 				that.loading = true;
 				//this.$api.ark.postChange
-				this.api.post('/postChange',req).then(response=>{
+				this.api.post('/postChange', req).then(response => {
 					console.log(response);
 					if (response.status === 200) {
 						uni.setStorage({
@@ -263,8 +272,8 @@
 						that.loading = false;
 						that.modalShow = true;
 					}
-				}).catch(msg=>{
-					
+				}).catch(msg => {
+
 				})
 				// app.func.post('/postChange', req, function(response) {
 				// 	console.log(response);
@@ -277,7 +286,51 @@
 				// 		that.modalShow = true;
 				// 	}
 				// });
-			}
+			},
+			saveBuddy() {
+				if (!this.id) {
+					uni.showToast({
+						title: "请输入游戏id",
+						icon: "none",
+						duration: 2000
+					});
+					return;
+				}
+				if (!this.server) {
+					uni.showToast({
+						title: "请选择游戏区服",
+						icon: "none",
+						duration: 2000
+					});
+					return;
+				}
+			
+				let req = {
+					id: this.id,
+					server: this.server,
+					remark: this.remark
+				};
+			
+			
+			
+				let that = this;
+				that.loading = true;
+				//this.$api.ark.postChange
+				this.api.post('/postBuddy', req).then(response => {
+					console.log(response);
+					if (response.status === 200) {
+						that.loading = false;
+						that.modalShow = true;
+					}
+				}).catch(msg => {
+			
+				})
+			},
+		},
+		
+		onLoad: function(options) {
+			this.TabCur = options.tab;
+			console.log(options.tab);
 		}
 	}
 </script>

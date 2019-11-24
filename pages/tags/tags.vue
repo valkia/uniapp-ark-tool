@@ -298,6 +298,7 @@
 									that.showLoading();
 									uni.uploadFile({
 										url: 'https://ark.dtodo.cn/ark/upload',
+										//url: 'http://127.0.0.1:7001/ark/upload',
 										filePath: tempFilePath,
 										name: 'file',
 										formData: {
@@ -305,8 +306,9 @@
 										},
 										success(res) {
 											that.hideLoading();
-											if (res.data != '[]') {
-												let tagList = JSON.parse(res.data);
+											let result = JSON.parse(res.data).data;
+											if (result != '[]') {
+												let tagList = result;
 												for (let i = 0; i < tagList.length; i++) {
 													that.clickTagF(tagList[i], true);
 												}
@@ -329,6 +331,7 @@
 							that.showLoading();
 							uni.uploadFile({
 								url: 'https://ark.dtodo.cn/upload',
+								//url: 'http://127.0.0.1:7001/ark/upload',
 								filePath: tempFilePaths[0],
 								name: 'file',
 								formData: {
@@ -336,8 +339,9 @@
 								},
 								success(res) {
 									that.hideLoading();
-									if (res.data != '[]') {
-										let tagList = JSON.parse(res.data);
+									let result = JSON.parse(res.data).data;
+									if (result != '[]') {
+										let tagList = result;
 										for (let i = 0; i < tagList.length; i++) {
 											that.clickTagF(tagList[i], true);
 										}
@@ -555,7 +559,7 @@
 				var that = this;
 				this.api.get('/tagsAval',{}).then(res => {
 
-					that.tags_aval = JSON.parse(res.data);
+					that.tags_aval = res.data;
 					console.log(that.tags_aval)
 				}).catch(function(msg) {
 					console.log(msg)

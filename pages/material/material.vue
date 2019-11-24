@@ -17,55 +17,42 @@
 								</td>
 							</tr>
 							<tr>
-								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn">预设</button></td>
+								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn"></button></td>
 								<td>
-									<label v-if="isMobile" class="mdui-textfield-label">预设</label>
+									<label v-if="isMobile" class="mdui-textfield-label">{{selected.presets}}</label>
 									<!-- 预设 -->
 									<vue-tags-input id="preset" ref="presetInput" v-model="preset" :tags="selected.presets" :allow-edit-tags="false"
 									 :add-from-paste="false" :add-on-blur="false" :autocomplete-items="presetItems" :add-only-from-autocomplete="true"
-									 :autocomplete-always-open="false" placeholder="输入干员名/拼音/拼音首字母" autocomplete="off" 
-									 @tags-changed="usePreset" @before-adding-tag="obj=>showPreset(obj)">
-										<view slot="autocomplete-item" slot-scope="props" @click="props.performAdd(props.item)" class="cu-list menu-avatar">
-											<view class="cu-item">
-											<view class="cu-avatar round lg"><img class="cu-avatar round lg" :key="`head-${props.item.text}`" :src="avatar(addition[props.item.text])" /><!--  --></view>
-											<view class="content flex-sub">{{ props.item.text }}</view>
-											</view>
-										</view>
-										<!-- <view class="cu-list menu-avatar">
-											<view class="cu-item">
-												<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
-												<view class="content flex-sub">
-													<view class="text-grey">正义天使 凯尔</view>
-													<view class="text-gray text-sm flex justify-between">
-														十天前
-														<view class="text-gray text-sm">
-															<text class="cuIcon-attentionfill margin-lr-xs"></text> 10
-															<text class="cuIcon-appreciatefill margin-lr-xs"></text> 20
-															<text class="cuIcon-messagefill margin-lr-xs"></text> 30
-														</view>
-													</view>
-												</view>
-											</view>
-										</view> -->
+									 :autocomplete-always-open="false" placeholder="输入干员名/拼音/拼音首字母" autocomplete="off" @tags-changed="usePreset"
+									 @before-adding-tag="obj=>showPreset(obj)">
+										<div slot="autocomplete-item" slot-scope="props" @click="showPreset(props)" class="cu-list menu-avatar">
+
+											<div class="cu-avatar round lg"><img class="cu-avatar round lg" :key="`head-${props.item.text}`" :src="avatar(addition[props.item.text])" /><!--  -->
+											</div>
+											<div class="content flex-sub">{{ props.item.text }}</div>
+
+										</div>
+
 										<span class="no-sl" slot="tag-center" slot-scope="props" @click="showPreset(props,true)">{{ props.tag.text }}</span>
 									</vue-tags-input>
 								</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn">选项</button></td>
 
-								<view class="cu-form-group margin-top" v-for="(zh, en) in settingZh" :key="en" v-model="setting[en]">
-									<view class="title">{{zh}}</view>
-									<switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch>
+								<view class="cu-form-group margin-top" v-for="(zh, en) in settingZh" :key="en" >
+									<view class="title">{{zh}}  </view>
+									<switch @change="switchSetting(en)" :class="setting[en]?'checked':''" :checked="setting[en]?true:false"></switch>
 								</view>
 
-								<!-- <td>
-									<switch  :html="zh"  @change="SwitchA" :class="setting[en]?'checked':''" :checked="setting[en]?true:false"></switch>
-								</td> -->
-							</tr>
-							<tr>
+								//<td>
+								//	<switch  :html="zh"  @change="SwitchA" :class="setting[en]?'checked':''" :checked="setting[en]?true:false"></switch>
+								//</td>
+							</tr> -->
+							<!-- <tr>
 								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn">操作</button></td>
 								<td>
+									
 									<button class="cu-btn round bg-olive" @click="reset()">重置需求&amp;已有</button>
 									<button class="cu-btn round bg-olive" @click="reset('need')">重置需求</button>
 									<button class="cu-btn round bg-olive" @click="reset('have')">重置已有</button>
@@ -73,8 +60,9 @@
 									<button class="cu-btn round bg-olive" @click="restoreData"><i class="mdui-icon material-icons">file_download</i>恢复</button>
 									<button class="cu-btn round bg-olive" @click="resetPenguinData">强制更新掉落数据</button>
 								</td>
-							</tr>
-							<tr>
+							</tr> -->
+							<button id="ark-planner-btn" class="cu-btn round bg-olive" :disabled="apbDisabled" @click="apbDisabled=true;initPlanner().then(()=>{showPlan();apbDisabled=false;});">我该刷什么图</button>
+							<!-- <tr>
 								<td v-if="!isMobile" width="1"><button class="mdui-btn mdui-btn-dense mdui-color-teal no-pe tag-btn">计算</button></td>
 								<td>
 									<button id="ark-planner-btn" class="cu-btn round bg-olive" :disabled="apbDisabled" @click="apbDisabled=true;initPlanner().then(()=>{showPlan();apbDisabled=false;});">我该刷什么图</button>
@@ -88,12 +76,12 @@
 										<switch class="mdui-m-l-2" v-model="setting.planCardExpFirst"></switch>
 									</view>
 								</td>
-							</tr>
+							</tr> -->
 						</tbody>
 					</table>
 				</div>
 				<!-- 说明 -->
-				<div class="mdui-col-lg-6">
+				<!-- <div class="mdui-col-lg-6">
 					<material-readme class="mdui-hidden-md-down" />
 					<div class="mdui-panel mdui-panel-gapless mdui-hidden-lg-up mdui-m-t-2" mdui-panel>
 						<div class="mdui-panel-item">
@@ -106,12 +94,13 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<!-- 素材 -->
+
 			<div class="mdui-row">
 				<!-- 简洁模式 -->
-				<div class="mdui-col-xs-12 mdui-m-t-4" v-if="setting.simpleMode">
+				<div class="mdui-col-xs-12 mdui-m-t-4" v-if="false">
 					<div class="material-group-wrap">
 						<!-- 素材卡片 -->
 						<div :class="isMobile?'mdui-col-xs-6 material-simple-wrap':'inline-block'" v-for="materialName in materialsOrder"
@@ -138,7 +127,10 @@
 					</div>
 				</div>
 				<!-- 正常模式 -->
+
 				<div class="mdui-col-xs-12" v-else v-for="i in rareNum" :key="`materials-${i}`" v-show="showMaterials[rareNum+1-i].length>0">
+					{{showMaterials}}
+					{{rareNum}}
 					<div class="mdui-typo rare-title">
 						<h2>稀有度 {{rareNum+1-i}}</h2>
 					</div>
@@ -187,7 +179,58 @@
 				</div>
 			</div>
 			<!-- 详细信息 -->
-			<div id="preset-setting" class="mdui-dialog mdui-card">
+			<view class="cu-modal" :class="modalName=='preset'?'show':''">
+				<view class="cu-dialog" v-if="true">
+					<view class="cu-bar bg-white justify-end">
+						<view class="content">选择</view>
+						<view class="action" @tap="hideModal('preset')">
+							<text class="cuIcon-close text-red"></text>
+						</view>
+					</view>
+					<view class="padding-xl">
+						<template v-if="sp">
+							<div class="mdui-card-header mdui-p-b-0">
+								<img class="mdui-card-header-avatar no-pe" :src="addition[selectedPresetName]?$root.avatar(addition[selectedPresetName]):false" />
+								<div class="mdui-card-header-title">{{selectedPresetName}}</div>
+							</div>
+							<div class="mdui-card-content preset-list mdui-p-x-3">
+								<div class="elite-cb-list">
+									<checkbox v-for="(o,i) in sp.elites" :key="`elite-${i+1}`" :value="pSetting.elites[i]">精{{i+1}}</checkbox>
+								</div>
+								<div class="skill-normal" v-if="sp.skills.normal.length>=2">
+									<mdui-checkbox v-model="pSetting.skills.normal[0]" class="skill-cb">技能</mdui-checkbox>
+									<div class="inline-block">
+
+										<mdui-select-num v-model="pSetting.skills.normal[1]" :options="l.range(1,sp.skills.normal.length+1)" @change="$root.mutation();if(pSetting.skills.normal[1]>=pSetting.skills.normal[2]) pSetting.skills.normal[2]=pSetting.skills.normal[1]+1"></mdui-select-num>
+										<i class="mdui-icon material-icons mdui-m-x-2">arrow_forward</i>
+										<span :key="`sn-s-${pSetting.skills.normal[1]+1}`">
+											<mdui-select-num v-model="pSetting.skills.normal[2]" :options="l.range(pSetting.skills.normal[1]+1,sp.skills.normal.length+2)"></mdui-select-num>
+										</span>
+									</div>
+								</div>
+								<template v-if="sp.skills.elite.length>0">
+									<div class="skill-elite" v-for="(skill, i) in sp.skills.elite" :key="`se-${skill.name}`">
+										<mdui-checkbox v-model="pSetting.skills.elite[i][0]" class="skill-cb">{{skill.name}}</mdui-checkbox>
+										<div class="inline-block">
+											<picker @change="PickerChange" :value="index" :range="pSetting.skills.elite[i][1]">
+												<view class="picker">
+													{{index>-1?picker[index]:'xuanze '}}
+												</view>
+											</picker>
+											<select v-model="pSetting.skills.elite[i][1]" :options="l.range(sp.skills.normal.length+1,sp.skills.normal.length+skill.need.length+1)"></select>
+											<i class="mdui-icon material-icons mdui-m-x-2">arrow_forward</i>
+											<span :key="`se-s-${pSetting.skills.elite[i][1]+1}`">
+												<mdui-select-num v-model="pSetting.skills.elite[i][2]" :options="l.range(pSetting.skills.elite[i][1]+1,sp.skills.normal.length+skill.need.length+2)"></mdui-select-num>
+											</span>
+										</div>
+									</div>
+								</template>
+							</div>
+						</template>
+					</view>
+				</view>
+			</view>
+			<!-- <div id="preset-setting" class="mdui-dialog mdui-card">
 				<template v-if="sp">
 					<div class="mdui-card-header mdui-p-b-0">
 						<img class="mdui-card-header-avatar no-pe" :src="addition[selectedPresetName]?$root.avatar(addition[selectedPresetName]):false" />
@@ -200,8 +243,8 @@
 						<div class="skill-normal" v-if="sp.skills.normal.length>=2">
 							<mdui-checkbox v-model="pSetting.skills.normal[0]" class="skill-cb">技能</mdui-checkbox>
 							<div class="inline-block">
-								<!-- $root.mutation();@change="if(pSetting.skills.normal[1]>=pSetting.skills.normal[2]) pSetting.skills.normal[2]=pSetting.skills.normal[1]+1" -->
-								<mdui-select-num v-model="pSetting.skills.normal[1]" :options="l.range(1,sp.skills.normal.length+1)"></mdui-select-num>
+								
+								<mdui-select-num v-model="pSetting.skills.normal[1]" :options="l.range(1,sp.skills.normal.length+1)"  @change="$root.mutation();if(pSetting.skills.normal[1]>=pSetting.skills.normal[2]) pSetting.skills.normal[2]=pSetting.skills.normal[1]+1" ></mdui-select-num>
 								<i class="mdui-icon material-icons mdui-m-x-2">arrow_forward</i>
 								<span :key="`sn-s-${pSetting.skills.normal[1]+1}`">
 									<mdui-select-num v-model="pSetting.skills.normal[2]" :options="l.range(pSetting.skills.normal[1]+1,sp.skills.normal.length+2)"></mdui-select-num>
@@ -212,7 +255,7 @@
 							<div class="skill-elite" v-for="(skill, i) in sp.skills.elite" :key="`se-${skill.name}`">
 								<mdui-checkbox v-model="pSetting.skills.elite[i][0]" class="skill-cb">{{skill.name}}</mdui-checkbox>
 								<div class="inline-block">
-									<!-- $root.mutation(); -->
+									
 									<mdui-select-num v-model="pSetting.skills.elite[i][1]" :options="l.range(sp.skills.normal.length+1,sp.skills.normal.length+skill.need.length+1)"></mdui-select-num>
 									<i class="mdui-icon material-icons mdui-m-x-2">arrow_forward</i>
 									<span :key="`se-s-${pSetting.skills.elite[i][1]+1}`">
@@ -228,7 +271,7 @@
 					<button v-if="this.pSetting.state=='add'" class="mdui-btn mdui-ripple mdui-color-pink" mdui-dialog-confirm @click="addPreset">添加</button>
 					<button v-if="this.pSetting.state=='edit'" class="mdui-btn mdui-ripple mdui-color-teal" mdui-dialog-confirm @click="editPreset">修改</button>
 				</div>
-			</div>
+			</div> -->
 			<!-- Planner -->
 			<!-- <div id="planner" class="mdui-dialog mdui-typo">
 				<template v-if="plan">
@@ -273,7 +316,24 @@
 					<button class="mdui-btn mdui-ripple" mdui-dialog-cancel>关闭</button>
 				</div>
 			</div> -->
-			
+
+
+			<!-- 
+			弹框例子
+			<view class="cu-modal" :class="modalName=='planner'?'show':''">
+				<view class="cu-dialog" v-if="plan">
+					<view class="cu-bar bg-white justify-end">
+						<view class="content">刷图计划</view>
+						<view class="action" @tap="hideModal('planner')">
+							<text class="cuIcon-close text-red"></text>
+						</view>
+					</view>
+					<view class="padding-xl">
+						内容
+					</view>
+				</view>
+			</view> 
+			 -->
 			<view class="cu-modal" :class="modalName=='planner'?'show':''">
 				<view class="cu-dialog" v-if="plan">
 					<view class="cu-bar bg-white justify-end">
@@ -322,9 +382,9 @@
 					</view>
 				</view>
 			</view>
-			
+
 			<!-- 关卡掉落详情 -->
-			<div id="drop-detail" class="mdui-dialog mdui-typo">
+			<view id="drop-detail" class="cu-modal" :class="modalName=='drop'?'show':''">
 				<template v-if="dropDetails">
 					<div class="mdui-dialog-title mdui-p-b-1">
 						{{dropFocus}}
@@ -343,7 +403,7 @@
 				<div class="mdui-dialog-actions">
 					<button class="mdui-btn mdui-ripple" mdui-dialog-cancel>关闭</button>
 				</div>
-			</div>
+			</view>
 		</div>
 	</view>
 </template>
@@ -355,7 +415,7 @@
 	import _ from 'lodash';
 	// import { Base64 } from 'js-base64';
 	// import Ajax from '../utils/ajax';
-	 import linprog from 'javascript-lp-solver/src/solver';
+	import linprog from 'javascript-lp-solver/src/solver';
 
 	import ADDITION from '../../data/addition.json';
 	import ELITE from '../../data/elite.json';
@@ -400,6 +460,7 @@
 			ArknNumItem
 		},
 		data: () => ({
+			modalName: "",
 			isMobile: true,
 			l: _,
 			showAll: false,
@@ -497,7 +558,7 @@
 			}
 		},
 		computed: {
-			
+
 			madeofTooltips() {
 				return _.transform(MATERIAL, (o, {
 					name,
@@ -572,26 +633,29 @@
 				return _.mergeWith(gaps, made, (a, b) => [a, b]);
 			},
 			hasDataMaterials() {
-				return _.mapValues(this.materials, (materials) => {
+				let that = this;
+				return _.mapValues(that.materials, (materials) => {
 					const show = [];
 					for (const {
 							name
 						} of materials) {
-						if (this.inputsInt[name].need + this.inputsInt[name].have + this.gaps[name][0] + this.gaps[name][1] > 0)
+						if (that.inputsInt[name].need + that.inputsInt[name].have + that.gaps[name][0] + that.gaps[name][1] > 0)
 							show.push(name);
 					}
 					return show;
 				});
 			},
 			showMaterials() {
-				const result = _.mapValues(this.materials, (materials, rareNum) => {
+				console.log(this.materials)
+				let that = this;
+				const result = _.mapValues(that.materials, (materials, rareNum) => {
 					const show = [];
 					for (const {
 							name
 						} of materials) {
-						if (this.inputsInt[name].need > 0 || (this.inputsInt[name].need == 0 && this.selected.rare[rareNum - 1] && (
-								this.hasDataMaterials[rareNum].includes(name) || (!this.hasDataMaterials[rareNum].includes(name) && !(this.setting
-									.hideIrrelevant && this.hasInput)))))
+						if (that.inputsInt[name].need > 0 || (that.inputsInt[name].need == 0 && that.selected.rare[rareNum - 1] && (
+								that.hasDataMaterials[rareNum].includes(name) || (!that.hasDataMaterials[rareNum].includes(name) && !(that.setting
+									.hideIrrelevant && that.hasInput)))))
 							show.push(name);
 					}
 					return show;
@@ -609,6 +673,7 @@
 				return result;
 			},
 			showMaterialsFlatten() {
+				console.log(this.materials)
 				return _.transform(this.materials, (showMaterials, materials, rareNum) => {
 					for (const {
 							name
@@ -628,6 +693,7 @@
 				return sum;
 			},
 			presetItems() {
+				console.log(this.preset);
 				const input = this.preset.toLowerCase();
 				const result = [];
 				for (const name in this.elite) {
@@ -771,8 +837,14 @@
 			}
 		},
 		methods: {
-			avatar({ img, full }) {
-			    return `/static/img/avatar/${full}.${img}`;
+			switchSetting(en) {
+				this.setting[en] = !this.setting[en];
+			},
+			avatar({
+				img,
+				full
+			}) {
+				return `/static/img/avatar/${full}.${img}`;
 			},
 			showModal(string) {
 				this.modalName = string
@@ -814,6 +886,7 @@
 				});
 			},
 			usePreset(presets) {
+				console.log(presets);
 				if (presets) this.selected.presets = presets;
 				this.reset('need', false);
 				for (const {
@@ -849,7 +922,7 @@
 			},
 			showPreset(obj, edit = false) {
 				this.selectedPreset = obj;
-				this.selectedPresetName = obj.tag.text;
+				this.selectedPresetName = obj.item.text;
 				if (edit) this.pSetting = _.cloneDeep(this.selected.presets[obj.index].setting);
 				else {
 					this.pSetting = _.cloneDeep(pSettingInit);
@@ -860,8 +933,10 @@
 					});
 				}
 				this.$nextTick(() => {
-					this.presetDialog.open();
+					//this.presetDialog.open();
 					//this.$root.mutation();
+					console.log("show model");
+					this.showModal('preset');
 				});
 			},
 			addPreset() {
@@ -940,8 +1015,8 @@
 						icon: "none",
 						duration: 2000
 					});
-					
-					const data = await this.getByUrl(penguinURL,{}).catch(() => false);
+
+					const data = await this.getByUrl(penguinURL, {}).catch(() => false);
 					//const data = await Ajax.get(penguinURL, true).catch(() => false);
 					//tip.close();
 					if (data) {
@@ -1054,10 +1129,9 @@
 				//const Mdui = this.$root.Mdui;
 				if (this.plan.cost === 0) {
 					alert("不用计算");
-				}
-				else this.$nextTick(() => this.showModal('planner'));
+				} else this.$nextTick(() => this.showModal('planner'));
 			},
-			
+
 			getByUrl(url, data) {
 				return new Promise(function(resolve, reject) {
 					uni.request({
@@ -1068,45 +1142,45 @@
 							'Content-Type': 'application/json'
 						},
 						success: function(res) {
-							
-								if (res.statusCode === 404) {
-									uni.showToast({
-										title: "系统升级中，请稍等",
-										icon: "none",
-										duration: 2000
-									})
-									return;
-								} else if (res.statusCode === 200) {
-									resolve(res.data);
-								} else {
-									uni.showToast({
-										title: "系统出错啦，请联系管理员",
-										icon: "none",
-										duration: 2000
-									})
-									return;
-								}
-							
-							
-							
-						},
-						fail: function(err) {
-							
+
+							if (res.statusCode === 404) {
 								uni.showToast({
-									title: "网络错误或服务器升级中",
+									title: "系统升级中，请稍等",
 									icon: "none",
 									duration: 2000
 								})
 								return;
-							
+							} else if (res.statusCode === 200) {
+								resolve(res.data);
+							} else {
+								uni.showToast({
+									title: "系统出错啦，请联系管理员",
+									icon: "none",
+									duration: 2000
+								})
+								return;
+							}
+
+
+
+						},
+						fail: function(err) {
+
+							uni.showToast({
+								title: "网络错误或服务器升级中",
+								icon: "none",
+								duration: 2000
+							})
+							return;
+
 						}
 					})
-			
-			
+
+
 				});
-			
+
 			},
-			
+
 			resetPenguinData() {
 				localStorage.removeItem('material.penguinData');
 				window.location.reload();
@@ -1135,6 +1209,8 @@
 			}
 		},
 		created() {
+
+			console.log(this.materials);
 			for (const {
 					name
 				} of this.materials) {
@@ -1163,6 +1239,7 @@
 			}
 		},
 		mounted() {
+			console.log("mounted");
 			//window.mutation = this.$root.mutation;
 
 			// this.presetDialog = new this.$root.Mdui.Dialog('#preset-setting', { history: false });
@@ -1629,47 +1706,52 @@
 	#arkn-material {
 		background: #fff;
 	}
-	
+
 	.material:not(.material-simple) {
-	    -webkit-box-shadow: none;
-	    box-shadow: none;
-	    width: 100%;
-	    background: transparent;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		width: 100%;
+		background: transparent;
 	}
+
 	.material {
-	    min-width: 275px;
-	    display: inline-block;
+		min-width: 275px;
+		display: inline-block;
 	}
+
 	.mdui-list-item-avatar {
-	    min-width: 40px;
-	    max-width: 40px;
-	    height: 40px;
-	    margin-top: 8px;
-	    margin-bottom: 8px;
-	    line-height: 40px;
-	    color: #fff;
-	    text-align: center;
-	    background-color: #bdbdbd;
-	    border-radius: 50%;
+		min-width: 40px;
+		max-width: 40px;
+		height: 40px;
+		margin-top: 8px;
+		margin-bottom: 8px;
+		line-height: 40px;
+		color: #fff;
+		text-align: center;
+		background-color: #bdbdbd;
+		border-radius: 50%;
 	}
+
 	.mdui-list-item-avatar img {
-	    width: 100%;
-	    height: 100%;
-	    border-radius: 50%;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
 	}
+
 	.mdui-list-item-content {
-	    padding-top: 14px;
-	    padding-bottom: 14px;
-	    font-size: 16px;
-	    font-weight: 400;
-	    line-height: 20px;
-	    -webkit-box-flex: 1;
-	    -webkit-flex-grow: 1;
-	    -ms-flex-positive: 1;
-	    flex-grow: 1;
+		padding-top: 14px;
+		padding-bottom: 14px;
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 20px;
+		-webkit-box-flex: 1;
+		-webkit-flex-grow: 1;
+		-ms-flex-positive: 1;
+		flex-grow: 1;
 	}
-	.cu-list.menu-avatar>.cu-item{
-		    height: 60px;
-		    background-color: unset;
+
+	.cu-list.menu-avatar>.cu-item {
+		height: 60px;
+		background-color: unset;
 	}
 </style>
