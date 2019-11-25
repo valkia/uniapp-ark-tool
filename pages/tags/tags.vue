@@ -297,7 +297,7 @@
 									const tempFilePath = res.tempFilePath;
 									that.showLoading();
 									uni.uploadFile({
-										url: 'https://ark.dtodo.cn/ark/upload',
+										url: 'https://node.dtodo.cn/ark/upload',
 										//url: 'http://127.0.0.1:7001/ark/upload',
 										filePath: tempFilePath,
 										name: 'file',
@@ -330,7 +330,7 @@
 						} else {
 							that.showLoading();
 							uni.uploadFile({
-								url: 'https://ark.dtodo.cn/upload',
+								url: 'https://node.dtodo.cn/ark/upload',
 								//url: 'http://127.0.0.1:7001/ark/upload',
 								filePath: tempFilePaths[0],
 								name: 'file',

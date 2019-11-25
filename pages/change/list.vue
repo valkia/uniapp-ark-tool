@@ -4,7 +4,7 @@
 			<block slot="backText">返回</block>
 			<block slot="content">{{TabCur==0?'好友添加':'线索互换'}}</block>
 		</cu-custom>
-		<scroll-view scroll-x class="bg-white nav">
+		<scroll-view scroll-x class="bg-white nav fixed" v-bind:style="{top:(CustomBar)+'px'}">
 			<view class="flex text-center">
 				<view class="cu-item flex-sub" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in Tablist" :key="index"
 				 @tap="tabSelect" :data-id="index">
@@ -12,7 +12,7 @@
 				</view>
 			</view>
 		</scroll-view>
-		<view v-if="TabCur==0" class="cu-bar bg-white search fixed" v-bind:style="{top:(CustomBar+45)+'px'}">
+		<view v-if="TabCur==0" class="cu-bar bg-white search fixed" v-bind:style="{top:(CustomBar+49)+'px'}">
 			<form style="width: 100%;">
 				<view class="cu-form-group">
 					<view class="title">筛选游戏区服</view>
@@ -24,7 +24,7 @@
 				</view>
 			</form>
 		</view>
-		<view v-if="TabCur==1" class="cu-bar bg-white search fixed" v-bind:style="{top:(CustomBar+45)+'px'}">
+		<view v-if="TabCur==1" class="cu-bar bg-white search fixed" v-bind:style="{top:(CustomBar+49)+'px'}">
 			<view class="search-form ">
 				<text class="cuIcon-search"></text>
 				<input type="text" v-model="keyword" placeholder="搜索需要的线索(数字 空格隔开)"></input>
@@ -44,7 +44,7 @@
 		</button>
 
 
-		<view class="cu-item shadow" style="margin-bottom: 60px;padding-top:50px">
+		<view class="cu-item shadow" style="margin-bottom: 60px;padding-top:105px">
 			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">现在点击昵称就能直接复制啦~</view>
 			<view class="cu-list cu-card menu comment solids-top">
 

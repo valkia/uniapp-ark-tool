@@ -20,10 +20,10 @@
 			"path": "pages/about/log",
 			"style": {}
 		}
-	    ,{
-            "path" : "pages/material/material",
-            "style" : {}
-        }
+	    // ,{
+     //        "path" : "pages/material/material",
+     //        "style" : {}
+     //    }
     ],
 	"globalStyle": {
 		"mp-alipay": {
