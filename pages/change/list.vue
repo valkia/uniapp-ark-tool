@@ -4,48 +4,49 @@
 			<block slot="backText">返回</block>
 			<block slot="content">{{TabCur==0?'好友添加':'线索互换'}}</block>
 		</cu-custom>
-		<scroll-view scroll-x class="bg-white nav fixed" v-bind:style="{top:(CustomBar)+'px'}">
-			<view class="flex text-center">
-				<view class="cu-item flex-sub" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in Tablist" :key="index"
-				 @tap="tabSelect" :data-id="index">
-					{{item}}
+		<view class="fixed" v-bind:style="{top:(CustomBar)+'px'}">
+			<scroll-view scroll-x class="bg-white nav ">
+				<view class="flex text-center">
+					<view class="cu-item flex-sub" :class="index==TabCur?'text-green cur':''" v-for="(item,index) in Tablist" :key="index"
+					 @tap="tabSelect" :data-id="index">
+						{{item}}
+					</view>
 				</view>
+			</scroll-view>
+			<view v-if="TabCur==0" class="cu-bar bg-white search ">
+				<form style="width: 100%;">
+					<view class="cu-form-group">
+						<view class="title">筛选游戏区服</view>
+						<picker @change="PickerChange" :value="serverIndex" :range="serverList">
+							<view class="picker" style="text-align: left;">
+								{{serverIndex!=null?serverList[serverIndex]:'全部'}}
+							</view>
+						</picker>
+					</view>
+				</form>
 			</view>
-		</scroll-view>
-		<view v-if="TabCur==0" class="cu-bar bg-white search fixed" v-bind:style="{top:(CustomBar+49)+'px'}">
-			<form style="width: 100%;">
-				<view class="cu-form-group">
-					<view class="title">筛选游戏区服</view>
-					<picker @change="PickerChange" :value="serverIndex" :range="serverList">
-						<view class="picker" style="text-align: left;">
-							{{serverIndex!=null?serverList[serverIndex]:'全部'}}
-						</view>
-					</picker>
+			<view v-if="TabCur==1" class="cu-bar bg-white search ">
+				<view class="search-form ">
+					<text class="cuIcon-search"></text>
+					<input type="text" v-model="keyword" placeholder="搜索需要的线索(数字 空格隔开)"></input>
 				</view>
-			</form>
-		</view>
-		<view v-if="TabCur==1" class="cu-bar bg-white search fixed" v-bind:style="{top:(CustomBar+49)+'px'}">
-			<view class="search-form ">
-				<text class="cuIcon-search"></text>
-				<input type="text" v-model="keyword" placeholder="搜索需要的线索(数字 空格隔开)"></input>
+				<button class="cu-btn  bg-green" style="margin-right: 10px;" @tap="search">搜索</button>
 			</view>
-			<button class="cu-btn  bg-green" style="margin-right: 10px;" @tap="search">搜索</button>
 		</view>
-
 		<button class="cu-btn cuIcon lg bg-green fixed-btn" style="bottom: 260rpx;" hover-class="none" open-type="share"
 		 data-id="2">
 			<text class="cuIcon-share"></text>
 		</button>
 
-		<button class="cu-btn cuIcon lg bg-green fixed-btn">
+		<!-- <button class="cu-btn cuIcon lg bg-green fixed-btn">
 			<navigator class="content" :url="'/pages/change/new?tab='+TabCur" navigateTo hover-class="none">
 				<text class="cuIcon-add"></text>
 			</navigator>
-		</button>
+		</button> -->
 
 
-		<view class="cu-item shadow" style="margin-bottom: 60px;padding-top:105px">
-			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">现在点击昵称就能直接复制啦~</view>
+		<view class="cu-item shadow" style="margin-bottom: 60px">
+			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">根据小程序要求，去掉了发布信息功能，后续恢复。点击昵称可以直接复制</view>
 			<view class="cu-list cu-card menu comment solids-top">
 
 				<view class="cu-item" v-for="change in changeList">
@@ -181,6 +182,8 @@
 						keyword: this.keyword
 					};
 				}
+
+				that.changeList = []; //先清空列表
 				this.api.post(url, params).then(response => {
 
 					if (response.status === 200) {
@@ -254,5 +257,8 @@
 	.cu-bar.fixed,
 	.nav.fixed {
 		z-index: 999;
+	}
+	.search {
+		border-bottom: 1px solid #f1f1f1;
 	}
 </style>

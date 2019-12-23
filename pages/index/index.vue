@@ -15,7 +15,7 @@
 				<view class='cuIcon-cu-image'>
 					<text class=" lg " :class="PageCur=='changeList'?'text-green cuIcon-formfill':'text-gray cuIcon-form'"></text>
 				</view>
-				<view :class="PageCur=='changeList'?'text-green':'text-gray'">线索交换</view>
+				<view :class="PageCur=='changeList'?'text-green':'text-gray'">好友/线索</view>
 			</view>
 			<view class="action" @click="NavChange" data-cur="about">
 				<view class='cuIcon-cu-image'>
@@ -37,7 +37,50 @@
 		methods: {
 			NavChange: function(e) {
 				this.PageCur = e.currentTarget.dataset.cur
-			}
+			},
+			onShareAppMessage(res) {
+			        if (res.from == "button") {
+			            if (res.target.dataset.id === '1') {
+			                return {
+			                    title: '支持识别截图的公开招募助手',
+			                    desc: '支持识别截图的公开招募助手',
+			                    imageUrl: '../../static/ark11.jpg'
+			                };
+			            }
+			            else if (res.target.dataset.id === '3') {
+			                return {
+			                    title: '支持识别截图的公开招募助手',
+			                    desc: '支持识别截图的公开招募助手',
+								imageUrl: '../../static/ark11.jpg'
+			                };
+			            }
+			            else if (res.target.dataset.id === '2') {
+			                var value = wx.getStorageSync('changeClue');
+			                if (!value) {
+			                    value = "快来找到你需要的线索~";
+			                }
+			                return {
+			                    title: value,
+			                    desc: value,
+			                    imageUrl: '../../static/ark66.jpg'
+			                };
+			            }
+			            else {
+			                return {
+			                    title: '支持识别截图的公开招募助手',
+			                    desc: '支持识别截图的公开招募助手',
+			                    imageUrl: '../../static/ark11.jpg'
+			                };
+			            }
+			        }
+			        else {
+			            return {
+			                title: '支持识别截图的公开招募助手',
+			                desc: '支持识别截图的公开招募助手',
+			                imageUrl: '../../static/ark11.jpg',
+			            };
+			        }
+			    }
 		}
 	}
 </script>

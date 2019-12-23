@@ -140,7 +140,7 @@
 					color: '#ffffff'
 				},
 			]
-			Vue.prototype.version = 'v1.3.2';
+			Vue.prototype.version = 'v1.3.4';
 			
 		},
 		onShow: function() {

@@ -19,7 +19,7 @@
 			<!-- <view class="flex flex-wrap">
  {{checkedTags}}
 </view> -->
-			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">新增识图功能，点击右边上传按钮上传游戏中的公开招募界面截图即可</view>
+			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">[支援机械]标签结果等待测试后添加</view>
 			<view class="flex flex-wrap" style="padding:5px 5px 0 5px">
 				<view v-for="item in showStars" v-bind:key="item.name" v-on:tap="clickStars(item.name)" class="tag-number cu-tag"
 				 :class="item.showFlag?'bg-olive':'line-olive'">{{item.name}}</view>
@@ -155,12 +155,9 @@
 						}]
 					},
 					{
-						"cn": "性别",
+						"cn": "新增",
 						"cntags": [{
-							name: "男性干员",
-							showFlag: false
-						}, {
-							name: "女性干员",
+							name: "支援机械",
 							showFlag: false
 						}]
 					},
