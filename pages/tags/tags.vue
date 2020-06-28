@@ -19,7 +19,7 @@
 			<!-- <view class="flex flex-wrap">
  {{checkedTags}}
 </view> -->
-			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">[支援机械]标签结果等待测试后添加</view>
+			<view style="padding:8px;color:#ff0000;background:#ffffe9" class="solid-bottom">角色图鉴很快就可以和大家见面啦~</view>
 			<view class="flex flex-wrap" style="padding:5px 5px 0 5px">
 				<view v-for="item in showStars" v-bind:key="item.name" v-on:tap="clickStars(item.name)" class="tag-number cu-tag"
 				 :class="item.showFlag?'bg-olive':'line-olive'">{{item.name}}</view>
@@ -294,7 +294,7 @@
 									const tempFilePath = res.tempFilePath;
 									that.showLoading();
 									uni.uploadFile({
-										url: 'https://node.dtodo.cn/ark/upload',
+										url: 'https://ark.dtodo.cn/ark/upload',
 										//url: 'http://127.0.0.1:7001/ark/upload',
 										filePath: tempFilePath,
 										name: 'file',
@@ -327,7 +327,7 @@
 						} else {
 							that.showLoading();
 							uni.uploadFile({
-								url: 'https://node.dtodo.cn/ark/upload',
+								url: 'https://ark.dtodo.cn/ark/upload',
 								//url: 'http://127.0.0.1:7001/ark/upload',
 								filePath: tempFilePaths[0],
 								name: 'file',
