@@ -6,6 +6,7 @@
 		</view>
 		<tags v-if="PageCur=='tags'"></tags>
 		<changeList v-if="PageCur=='changeList'"></changeList>
+		<DetailsLayout v-if="PageCur=='DetailsLayout'"></DetailsLayout>
 		<about v-if="PageCur=='about'"></about>
 		<view class="cu-bar tabbar bg-white shadow foot">
 			<view class="action" @click="NavChange" data-cur="tags">
@@ -13,6 +14,12 @@
 					<text class=" lg " :class="PageCur=='tags'?'text-green cuIcon-friendaddfill':'text-gray cuIcon-friendadd'"></text>
 				</view>
 				<view :class="PageCur=='tags'?'text-green':'text-gray'">招募</view>
+			</view>
+			<view class="action" @click="NavChange" data-cur="DetailsLayout">
+				<view class='cuIcon-cu-image'>
+					<text class=" lg " :class="PageCur=='DetailsLayout'?'text-green cuIcon-formfill':'text-gray cuIcon-form'"></text>
+				</view>
+				<view :class="PageCur=='DetailsLayout'?'text-green':'text-gray'">图鉴</view>
 			</view>
 			<view class="action" @click="NavChange" data-cur="changeList">
 				<view class='cuIcon-cu-image'>
@@ -31,14 +38,16 @@
 </template>
 
 <script>
+	import DetailsLayout from '../../components/DetailsLayout'
 	export default {
 		data() {
 			return {
-				CustomBar:this.CustomBar,
+				CustomBar: this.CustomBar,
 				PageCur: 'tags',
 				tipsFlag: true
 			}
 		},
+		components:{DetailsLayout},
 		methods: {
 			NavChange: function(e) {
 				this.PageCur = e.currentTarget.dataset.cur
@@ -91,7 +100,7 @@
 				}
 			}
 		},
-		mounted:function(){
+		mounted: function() {
 			try {
 				let tipsFlag = uni.getStorageSync('tipsFlag');
 				console.log(tipsFlag)
@@ -105,7 +114,7 @@
 </script>
 
 <style>
-.tips {
+	.tips {
 		position: fixed;
 		top: 70px;
 		z-index: 20000;
@@ -164,5 +173,4 @@
 		transform: rotate(90deg);
 		opacity: 0.8;
 	}
-
 </style>

@@ -24,6 +24,10 @@
      //        "path" : "pages/material/material",
      //        "style" : {}
      //    }
+        ,{
+            "path" : "pages/char/details",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"mp-alipay": {

@@ -33,5 +33,6 @@ import http from './api/request.js'
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
 Vue.prototype.api = {
 	get: http.get,
+	get2: http.get2,
 	post: http.post
 }

@@ -1,7 +1,7 @@
 var host = 'https://ark.dtodo.cn/ark'; //正式域名
 //var host = 'http://127.0.0.1:7001/ark';//本地开发
 //var rootDocment = 'http://176.122.161.8:8080/ark';//正式域名
-
+let  host2 = 'https://www.dtodo.cn/arknights'; //正式域名
 function success(res, resolve, reject) {
 	if (res.statusCode === 404) {
 		uni.showToast({
@@ -30,6 +30,9 @@ function fail() {
 	})
 	return;
 }
+
+
+
 
 function post(url, data) {
 	
@@ -69,9 +72,30 @@ function get(url, data) {
 	});
 
 }
+function get2(url, data) {
+	return new Promise(function(resolve, reject) {
+		uni.request({
+			url: host2 + url,
+			data: data,
+			method: 'get',
+			header: {
+				'Content-Type': 'application/json'
+			},
+			success: function(res) {
+				success(res, resolve, reject);
+			},
+			fail: function(err) {
+				fail();
+			}
+		})
 
+
+	});
+
+}
 
 module.exports = {
 	post: post,
-	get: get
+	get: get,
+	get2: get2
 }
