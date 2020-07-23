@@ -15,12 +15,12 @@
 				</view>
 				<view :class="PageCur=='tags'?'text-green':'text-gray'">招募</view>
 			</view>
-			<view class="action" @click="NavChange" data-cur="DetailsLayout">
+			<!-- <view class="action" @click="NavChange" data-cur="DetailsLayout">
 				<view class='cuIcon-cu-image'>
 					<text class=" lg " :class="PageCur=='DetailsLayout'?'text-green cuIcon-formfill':'text-gray cuIcon-form'"></text>
 				</view>
 				<view :class="PageCur=='DetailsLayout'?'text-green':'text-gray'">图鉴</view>
-			</view>
+			</view> -->
 			<view class="action" @click="NavChange" data-cur="changeList">
 				<view class='cuIcon-cu-image'>
 					<text class=" lg " :class="PageCur=='changeList'?'text-green cuIcon-formfill':'text-gray cuIcon-form'"></text>

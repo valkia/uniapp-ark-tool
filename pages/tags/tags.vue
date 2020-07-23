@@ -342,6 +342,13 @@
 										for (let i = 0; i < tagList.length; i++) {
 											that.clickTagF(tagList[i], true);
 										}
+										
+										that.api.post2('/setTagLogs',{"list":tagList}).then(res => {
+										
+											console.log("setTagLogs ok");
+										}).catch(function(msg) {
+										})
+										
 									} else {
 										that.showModal("没有识别的招募标签，请检查图片。", 3000);
 									}
