@@ -5,7 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "@johmun/vue-tags-input": "^2.1.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "javascript-lp-solver": "^0.4.24",
     "lodash": "^4.17.14",
     "prettier": "^1.12.1",
